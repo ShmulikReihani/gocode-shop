@@ -3,11 +3,20 @@ import Header from "./components/Header/Header";
 import Products from "./components/Products/Products";
 import { useState, useEffect } from "react";
 import Spinner from "./components/UI/Spinner/Spinner";
+import { CartContext } from "./components/Context/CartContext/CartContext";
 
 function App() {
   const [products, setProducts] = useState([]);
   const [filterProducts, setFilterProducts] = useState([]);
   const [spinner, setSpinner] = useState(false);
+
+  const [categories, setCategories] = useState([]);
+
+  function handlerFilter(event) {
+    setFilterProducts(
+      products.filter((product) => product.category === event.target.value)
+    );
+  }
 
   useEffect(() => {
     setSpinner((prev) => !prev);
@@ -20,11 +29,23 @@ function App() {
       });
   }, []);
 
+  useEffect(() => {
+    setCategories(
+      products
+        .map((p) => p.category)
+        .filter((value, index, array) => array.indexOf(value) === index)
+    );
+  }, [products]);
+
+  console.log(categories);
+
   return (
-    <div className="App">
-      <Header products={products} setProducts={setFilterProducts} />
-      {spinner ? <Spinner /> : <Products products={filterProducts} />}
-    </div>
+    <CartContext>
+      <div className="App">
+        <Header setProducts={handlerFilter} categories={categories} />
+        {spinner ? <Spinner /> : <Products products={filterProducts} />}
+      </div>
+    </CartContext>
   );
 }
 
