@@ -9,13 +9,26 @@ function App() {
   const [products, setProducts] = useState([]);
   const [filterProducts, setFilterProducts] = useState([]);
   const [spinner, setSpinner] = useState(false);
-
   const [categories, setCategories] = useState([]);
 
-  function handlerFilter(event) {
-    setFilterProducts(
-      products.filter((product) => product.category === event.target.value)
-    );
+  function handlerFilter(filterName, price) {
+    if (filterName === "") {
+      setFilterProducts(
+        products.filter((product) => {
+          return product.price > price[0] && product.price < price[1];
+        })
+      );
+    } else {
+      setFilterProducts(
+        products.filter((product) => {
+          return (
+            product.price > price[0] &&
+            product.price < price[1] &&
+            product.category === filterName
+          );
+        })
+      );
+    }
   }
 
   useEffect(() => {
@@ -30,19 +43,22 @@ function App() {
   }, []);
 
   useEffect(() => {
-    setCategories(
-      products
+    setCategories([
+      "all",
+      ...products
         .map((p) => p.category)
-        .filter((value, index, array) => array.indexOf(value) === index)
-    );
+        .filter((value, index, array) => array.indexOf(value) === index),
+    ]);
   }, [products]);
-
-  console.log(categories);
 
   return (
     <CartContext>
       <div className="App">
-        <Header setProducts={handlerFilter} categories={categories} />
+        <Header
+          categories={categories}
+          // slider={[sliderValue, setSliderValue]}
+          handlerFilter={handlerFilter}
+        />
         {spinner ? <Spinner /> : <Products products={filterProducts} />}
       </div>
     </CartContext>

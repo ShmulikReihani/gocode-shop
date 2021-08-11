@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { CartCtx } from "../../Context/CartContext/CartContext";
 import "./Product.css";
 
@@ -19,7 +19,7 @@ const Product = ({ title, image, price, id }) => {
   return (
     <div className="product-card">
       <div className="product-image">
-        <img src={image} />
+        <img src={image} alt={"/"} />
       </div>
       <div className="product-info">
         <h5>{title}</h5>

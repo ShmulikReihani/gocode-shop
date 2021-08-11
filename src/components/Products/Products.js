@@ -3,9 +3,9 @@ import "./Products.css";
 
 const Products = ({ products }) => {
   return (
-    <section className="products">
-      {products.map((product) => (
-        <>
+    <>
+      <section className="products">
+        {products.map((product) => (
           <Product
             key={product.id}
             id={product.id}
@@ -13,9 +13,9 @@ const Products = ({ products }) => {
             image={product.image}
             price={product.price}
           />
-        </>
-      ))}
-    </section>
+        ))}
+      </section>
+    </>
   );
 };
 
