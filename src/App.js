@@ -4,6 +4,7 @@ import Products from "./components/Products/Products";
 import { useState, useEffect } from "react";
 import Spinner from "./components/UI/Spinner/Spinner";
 import { CartContext } from "./components/Context/CartContext/CartContext";
+import { Container } from "@material-ui/core";
 
 function App() {
   const [products, setProducts] = useState([]);
@@ -12,7 +13,7 @@ function App() {
   const [categories, setCategories] = useState([]);
 
   function handlerFilter(filterName, price) {
-    if (filterName === "") {
+    if (filterName === "" || filterName === "all") {
       setFilterProducts(
         products.filter((product) => {
           return product.price > price[0] && product.price < price[1];
@@ -53,14 +54,10 @@ function App() {
 
   return (
     <CartContext>
-      <div className="App">
-        <Header
-          categories={categories}
-          // slider={[sliderValue, setSliderValue]}
-          handlerFilter={handlerFilter}
-        />
+      <Container fixed>
+        <Header categories={categories} handlerFilter={handlerFilter} />
         {spinner ? <Spinner /> : <Products products={filterProducts} />}
-      </div>
+      </Container>
     </CartContext>
   );
 }

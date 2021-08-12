@@ -1,4 +1,20 @@
-import { Grid, Slider, Typography } from "@material-ui/core";
+import {
+  AppBar,
+  FormControl,
+  Grid,
+  IconButton,
+  makeStyles,
+  Slider,
+  Toolbar,
+  Typography,
+  withStyles,
+  InputLabel,
+  NativeSelect,
+  InputBase,
+} from "@material-ui/core";
+import MenuIcon from "@material-ui/icons/Menu";
+import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
+import Badge from "@material-ui/core/Badge";
 import { useState } from "react";
 import { useContext } from "react";
 import { CartCtx } from "../Context/CartContext/CartContext";
@@ -8,10 +24,70 @@ function valuetext(value) {
   return `${value}`;
 }
 
+const StyledBadge = withStyles((theme) => ({
+  badge: {
+    right: -3,
+    top: 13,
+    border: `2px solid ${theme.palette.background.paper}`,
+    padding: "0 4px",
+  },
+}))(Badge);
+
+const BootstrapInput = withStyles((theme) => ({
+  root: {
+    "label + &": {
+      marginTop: theme.spacing(3),
+      marginBottom: 25,
+    },
+  },
+  input: {
+    borderRadius: 4,
+    position: "relative",
+    backgroundColor: theme.palette.background.paper,
+    border: "1px solid #ced4da",
+    fontSize: 16,
+    padding: "10px 26px 10px 12px",
+    transition: theme.transitions.create(["border-color", "box-shadow"]),
+    fontFamily: [
+      "-apple-system",
+      "BlinkMacSystemFont",
+      '"Segoe UI"',
+      "Roboto",
+      '"Helvetica Neue"',
+      "Arial",
+      "sans-serif",
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(","),
+    "&:focus": {
+      borderRadius: 4,
+      borderColor: "#80bdff",
+      boxShadow: "0 0 0 0.2rem rgba(0,123,255,.25)",
+    },
+  },
+}))(InputBase);
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+    marginTop: 10,
+    marginBottom: 25,
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  title: {
+    flexGrow: 1,
+  },
+}));
+
 const Header = ({ categories, handlerFilter }) => {
   const [list] = useContext(CartCtx);
   const [filterName, setFilterName] = useState("");
   const [sliderValue, setSliderValue] = useState([20, 40]);
+
+  const classes = useStyles();
 
   const handleChange = (event, newValue) => {
     setSliderValue(newValue);
@@ -23,32 +99,53 @@ const Header = ({ categories, handlerFilter }) => {
     handlerFilter(filterName, sliderValue);
   };
 
-  //onChange={setProducts}
   return (
     <>
-      <nav className="product-filter">
-        <h1>Jackets</h1>
+      <div className={classes.root}>
+        <AppBar position="static">
+          <Toolbar>
+            <IconButton
+              edge="start"
+              className={classes.menuButton}
+              color="inherit"
+              aria-label="menu"
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" className={classes.title}>
+              Jackets
+            </Typography>
+            <StyledBadge badgeContent={list.length} color="secondary">
+              <ShoppingCartIcon fontSize={"large"} />
+            </StyledBadge>
+          </Toolbar>
+        </AppBar>
+      </div>
 
-        <div className="sort">
-          <div className="collection-sort">
-            <label>Filter by:</label>
-            <select onChange={(e) => handleChangeFilterName(e.target.value)}>
-              {categories.map((categorie) => (
-                <option key={categorie} value={categorie}>
-                  {categorie}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-      </nav>
-      <div className="root">
-        <Typography>Sort by price</Typography>
-        <Grid container spacing={2}>
+      <div>
+        <Grid container spacing={2} alignItems="center">
           <Grid item>
-            <Typography>{sliderValue[0]}</Typography>
+            <FormControl className={classes.margin}>
+              <InputLabel htmlFor="demo-customized-select-native">
+                Filter by:
+              </InputLabel>
+              <NativeSelect
+                input={<BootstrapInput />}
+                onChange={(e) => handleChangeFilterName(e.target.value)}
+              >
+                {categories.map((categorie) => (
+                  <option key={categorie} value={categorie}>
+                    {categorie}
+                  </option>
+                ))}
+              </NativeSelect>
+            </FormControl>
           </Grid>
           <Grid item xs>
+            <Grid container justifyContent="space-between">
+              <Typography>{sliderValue[0]}</Typography>
+              <Typography>{sliderValue[1]}</Typography>
+            </Grid>
             <Slider
               value={sliderValue}
               onChange={handleChange}
@@ -59,12 +156,8 @@ const Header = ({ categories, handlerFilter }) => {
               getAriaValueText={valuetext}
             />
           </Grid>
-          <Grid item>
-            <Typography>{sliderValue[1]}</Typography>
-          </Grid>
         </Grid>
       </div>
-      <div>{list}</div>
     </>
   );
 };

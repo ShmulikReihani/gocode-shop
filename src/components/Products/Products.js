@@ -1,10 +1,11 @@
+import { Grid } from "@material-ui/core";
 import Product from "./Product/Product";
 import "./Products.css";
 
 const Products = ({ products }) => {
   return (
-    <>
-      <section className="products">
+    <section>
+      <Grid container>
         {products.map((product) => (
           <Product
             key={product.id}
@@ -14,8 +15,8 @@ const Products = ({ products }) => {
             price={product.price}
           />
         ))}
-      </section>
-    </>
+      </Grid>
+    </section>
   );
 };
 
