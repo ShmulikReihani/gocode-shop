@@ -5,7 +5,7 @@ import "./Products.css";
 const Products = ({ products }) => {
   return (
     <section>
-      <Grid container>
+      <Grid container spacing={2}>
         {products.map((product) => (
           <Product
             key={product.id}

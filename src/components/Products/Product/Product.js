@@ -17,15 +17,15 @@ import "./Product.css";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    maxHeight: 500,
+    height: 350,
     padding: "0 10px 0 10px",
-    objectFit: "contain",
+    objectFit: "",
   },
   media: {
     height: 200,
-    width: 100,
-    objectFit: "contain ",
-    justify: "center",
+    width: "100%",
+    objectFit: "contain",
+    // justify: "center",
   },
 }));
 
