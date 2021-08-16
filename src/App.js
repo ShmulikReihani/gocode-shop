@@ -11,6 +11,8 @@ function App() {
   const [filterProducts, setFilterProducts] = useState([]);
   const [spinner, setSpinner] = useState(false);
   const [categories, setCategories] = useState([]);
+  const [maxPrice, setMaxPrice] = useState(0);
+  const [minPrice, setMinPrice] = useState(0);
 
   function handlerFilter(filterName, price) {
     if (filterName === "" || filterName === "all") {
@@ -50,13 +52,36 @@ function App() {
         .map((p) => p.category)
         .filter((value, index, array) => array.indexOf(value) === index),
     ]);
+    setMaxPrice(
+      Math.max.apply(
+        Math,
+        products.map((p) => p.price)
+      )
+    );
+    setMinPrice(
+      Math.min.apply(
+        Math,
+        products.map((p) => p.price)
+      )
+    );
   }, [products]);
 
   return (
     <CartContext>
       <Container fixed>
-        <Header categories={categories} handlerFilter={handlerFilter} />
-        {spinner ? <Spinner /> : <Products products={filterProducts} />}
+        {spinner ? (
+          <Spinner />
+        ) : (
+          <>
+            <Header
+              categories={categories}
+              handlerFilter={handlerFilter}
+              maxPrice={maxPrice}
+              minPrice={minPrice}
+            />
+            <Products products={filterProducts} />
+          </>
+        )}
       </Container>
     </CartContext>
   );

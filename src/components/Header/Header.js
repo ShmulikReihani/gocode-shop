@@ -11,6 +11,7 @@ import {
   InputLabel,
   NativeSelect,
   InputBase,
+  Dialog,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
@@ -19,6 +20,7 @@ import { useState } from "react";
 import { useContext } from "react";
 import { CartCtx } from "../Context/CartContext/CartContext";
 import "./Header.css";
+import Cart from "../Cart/Cart";
 
 function valuetext(value) {
   return `${value}`;
@@ -80,12 +82,25 @@ const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
   },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: "#fff",
+  },
 }));
 
-const Header = ({ categories, handlerFilter }) => {
+const Header = ({ categories, handlerFilter, maxPrice, minPrice }) => {
   const [list] = useContext(CartCtx);
   const [filterName, setFilterName] = useState("");
-  const [sliderValue, setSliderValue] = useState([20, 40]);
+
+  const [sliderValue, setSliderValue] = useState([minPrice, maxPrice]);
+
+  const [open, setOpen] = useState(false);
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleToggle = () => {
+    setOpen(!open);
+  };
 
   const classes = useStyles();
 
@@ -116,10 +131,19 @@ const Header = ({ categories, handlerFilter }) => {
               Jackets
             </Typography>
             <StyledBadge badgeContent={list.length} color="secondary">
-              <ShoppingCartIcon fontSize={"large"} />
+              <ShoppingCartIcon fontSize={"large"} onClick={handleToggle} />
             </StyledBadge>
           </Toolbar>
         </AppBar>
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          scroll={"paper"}
+          aria-labelledby="scroll-dialog-title"
+          aria-describedby="scroll-dialog-description"
+        >
+          <Cart handleClose={handleClose} />
+        </Dialog>
       </div>
 
       <div>
@@ -151,6 +175,7 @@ const Header = ({ categories, handlerFilter }) => {
               onChange={handleChange}
               marks
               step={10}
+              max={maxPrice}
               valueLabelDisplay="auto"
               aria-labelledby="range-slider"
               getAriaValueText={valuetext}
