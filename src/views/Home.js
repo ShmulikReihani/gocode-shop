@@ -1,15 +1,9 @@
-// import "./App.css";
-import Header from "./components/Header/Header";
-import Products from "./components/Products/Products";
 import { useState, useEffect } from "react";
-import Spinner from "./components/UI/Spinner/Spinner";
-import { CartContext } from "./Context/CartContext/CartContext";
-import { Container } from "@material-ui/core";
-import { Route, Switch } from "react-router-dom";
-import Home from "./views/Home";
-import ProductDetails from "./views/ProductDetails";
+import Filter from "../components/Filter/Filter";
+import Products from "../components/Products/Products";
+import Spinner from "../components/UI/Spinner/Spinner";
 
-function App() {
+const Home = () => {
   const [products, setProducts] = useState([]);
   const [filterProducts, setFilterProducts] = useState([]);
   const [spinner, setSpinner] = useState(false);
@@ -68,39 +62,26 @@ function App() {
       )
     );
   }, [products]);
-
   return (
-    // <CartContext>
-    //   <Container fixed>
-    //     {spinner ? (
-    //       <Spinner />
-    //     ) : (
-    //       <>
-    //         <Header
-    //           categories={categories}
-    //           handlerFilter={handlerFilter}
-    //           maxPrice={maxPrice}
-    //           minPrice={minPrice}
-    //         />
-    //         <Products products={filterProducts} />
-    //       </>
-    //     )}
-    //   </Container>
-    // </CartContext>
-    <CartContext>
-      <Container fixed>
-        <Header />
-        <Switch>
-          <Route path="/products/:id">
-            <ProductDetails />
-          </Route>
-          <Route path="/">
-            <Home />
-          </Route>
-        </Switch>
-      </Container>
-    </CartContext>
+    <>
+      {/* <Container fixed> */}
+      {/* <Header /> */}
+      {spinner ? (
+        <Spinner />
+      ) : (
+        <>
+          <Filter
+            categories={categories}
+            handlerFilter={handlerFilter}
+            maxPrice={maxPrice}
+            minPrice={minPrice}
+          />
+          <Products products={filterProducts} />
+        </>
+      )}
+      {/* </Container> */}
+    </>
   );
-}
+};
 
-export default App;
+export default Home;

@@ -11,7 +11,7 @@ import {
   ButtonBase,
 } from "@material-ui/core";
 import { useContext } from "react";
-import { CartCtx } from "../Context/CartContext/CartContext";
+import { CartCtx } from "../../Context/CartContext/CartContext";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -54,18 +54,19 @@ const Cart = ({ handleClose }) => {
 
   function handlerMinusCart(id) {
     const item = list.findIndex((l) => l.id === id);
-    if (list[item].qnt > 1) {
+    if (list[item].qnt >= 1) {
       reduceTotalPrice(list[item].price);
       setList(list.map((l) => (l.id === id ? { ...l, qnt: l.qnt - 1 } : l)));
-    } else {
-      setList(list.filter((item) => item.id !== id));
+      if (list[item].qnt === 1) {
+        setList(list.filter((item) => item.id !== id));
+      }
     }
   }
 
   function handlerRemove(id) {
     const item = list.findIndex((l) => l.id === id);
     if (item > -1) {
-      reduceTotalPrice(Number(list[0].price) * list[0].qnt);
+      reduceTotalPrice(Number(list[item].price) * list[item].qnt);
       setList(list.filter((item) => item.id !== id));
     }
   }

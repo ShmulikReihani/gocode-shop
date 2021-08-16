@@ -12,7 +12,8 @@ import {
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import RemoveShoppingCartIcon from "@material-ui/icons/RemoveShoppingCart";
 import { useContext, useState, useEffect } from "react";
-import { CartCtx } from "../../Context/CartContext/CartContext";
+import { Link } from "react-router-dom";
+import { CartCtx } from "../../../Context/CartContext/CartContext";
 import "./Product.css";
 
 const useStyles = makeStyles((theme) => ({
@@ -42,7 +43,6 @@ const Product = ({ title, image, price, id }) => {
       setList([...list, product]);
     } else {
       setIsAdd(true);
-      console.log("listHandler", product.price, list[item].qnt);
       reduceTotalPrice(Number(product.price) * list[item].qnt);
       setList((prev) => prev.filter((item) => item.id !== product.id));
     }
@@ -61,13 +61,15 @@ const Product = ({ title, image, price, id }) => {
     <Grid item xs={12} sm={6} md={4}>
       <Card className={classes.root}>
         <CardActionArea>
-          <CardMedia
-            className={classes.media}
-            component="img"
-            alt={title}
-            image={image}
-            title={title}
-          />
+          <Link to={`/products/${id}`}>
+            <CardMedia
+              className={classes.media}
+              component="img"
+              alt={title}
+              image={image}
+              title={title}
+            />
+          </Link>
         </CardActionArea>
         <CardHeader
           action={
@@ -106,7 +108,7 @@ const Product = ({ title, image, price, id }) => {
         ></CardHeader>
         <CardContent>
           <Typography variant="body2" color="textSecondary" component="p">
-            {price}
+            {`$${price}`}
           </Typography>
         </CardContent>
       </Card>
