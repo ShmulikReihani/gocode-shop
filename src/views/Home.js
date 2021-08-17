@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState, useEffect } from "react";
 import Filter from "../components/Filter/Filter";
 import Products from "../components/Products/Products";
@@ -33,12 +34,24 @@ const Home = () => {
 
   useEffect(() => {
     setSpinner((prev) => !prev);
-    fetch("https://fakestoreapi.com/products")
-      .then((response) => response.json())
-      .then((data) => {
+    // fetch("http://localhost:8000/products")
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     setProducts(data);
+    //     setFilterProducts(data);
+    //     setSpinner((prev) => !prev);
+    //   });
+    const url = "http://localhost:8000/products";
+    axios
+      .get(url)
+      .then((res) => {
+        const data = res.data;
         setProducts(data);
         setFilterProducts(data);
         setSpinner((prev) => !prev);
+      })
+      .catch((err) => {
+        console.log(err);
       });
   }, []);
 
@@ -64,8 +77,6 @@ const Home = () => {
   }, [products]);
   return (
     <>
-      {/* <Container fixed> */}
-      {/* <Header /> */}
       {spinner ? (
         <Spinner />
       ) : (
@@ -79,7 +90,6 @@ const Home = () => {
           <Products products={filterProducts} />
         </>
       )}
-      {/* </Container> */}
     </>
   );
 };

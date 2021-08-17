@@ -1,6 +1,5 @@
 import {
   Card,
-  CardActions,
   CardContent,
   CardHeader,
   CardMedia,
@@ -11,6 +10,7 @@ import {
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import Spinner from "../components/UI/Spinner/Spinner";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,11 +31,16 @@ const ProductDetails = () => {
 
   useEffect(() => {
     setLodding((prev) => !prev);
-    fetch(`https://fakestoreapi.com/products/${params.id}`)
-      .then((response) => response.json())
-      .then((data) => {
+    const url = `http://localhost:8000/products/${params.id}`;
+    axios
+      .get(url)
+      .then((res) => {
+        let data = res.data;
         setProduct(data);
         setLodding((prev) => !prev);
+      })
+      .catch((err) => {
+        console.log(err);
       });
   }, []);
 
