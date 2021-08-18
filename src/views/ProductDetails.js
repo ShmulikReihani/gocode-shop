@@ -62,7 +62,11 @@ const ProductDetails = () => {
               <Typography variant="body2" color="textSecondary" component="p">
                 {product.description}
               </Typography>
-              <Typography variant="body2" color="textSecondary" component="p">
+              <Typography
+                color="black"
+                component="p"
+                style={{ marginTop: "10px" }}
+              >
                 {`$${product.price}`}
               </Typography>
             </CardContent>

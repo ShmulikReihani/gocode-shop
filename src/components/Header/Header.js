@@ -1,8 +1,11 @@
 import {
   AppBar,
+  createTheme,
   Dialog,
-  IconButton,
+  Grid,
+  Paper,
   makeStyles,
+  ThemeProvider,
   Toolbar,
   Typography,
   withStyles,
@@ -16,6 +19,7 @@ import { CartCtx } from "../../Context/CartContext/CartContext";
 import "./Header.css";
 import Cart from "../Cart/Cart";
 import { green } from "@material-ui/core/colors";
+import { Link } from "react-router-dom";
 
 const StyledBadge = withStyles((theme) => ({
   badge: {
@@ -26,19 +30,19 @@ const StyledBadge = withStyles((theme) => ({
   },
 }))(Badge);
 
+const theme = createTheme({
+  typography: {
+    fontSize: 12,
+  },
+});
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     marginBottom: 25,
   },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
   title: {
     flexGrow: 1,
-  },
-  appBar: {
-    backgroundColor: green,
   },
 }));
 
@@ -58,24 +62,40 @@ const Header = () => {
   return (
     <>
       <div className={classes.root}>
-        <AppBar position="static" className={classes.appBar}>
-          <Toolbar>
-            <IconButton
-              edge="start"
-              className={classes.menuButton}
-              color="inherit"
-              aria-label="menu"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="h6" className={classes.title}>
-              Jackets
-            </Typography>
-            <StyledBadge badgeContent={list.length} color="secondary">
-              <ShoppingCartIcon fontSize={"large"} onClick={handleToggle} />
-            </StyledBadge>
-          </Toolbar>
-        </AppBar>
+        <ThemeProvider theme={theme}>
+          <AppBar
+            position="static"
+            className={classes.appBar}
+            style={{ background: "#2E3B55" }}
+          >
+            <Toolbar>
+              <Grid
+                container
+                justifyContent="flex-end"
+                style={{ marginRight: "5%" }}
+              >
+                <Grid item xs={6}>
+                  <Link
+                    to="/"
+                    style={{ textDecoration: "none", color: "white" }}
+                  >
+                    <Typography variant="h6" className={classes.title}>
+                      SHOPPING STORE
+                    </Typography>
+                  </Link>
+                </Grid>
+                <Grid item>
+                  <StyledBadge badgeContent={list.length} color="secondary">
+                    <ShoppingCartIcon
+                      fontSize={"large"}
+                      onClick={handleToggle}
+                    />
+                  </StyledBadge>
+                </Grid>
+              </Grid>
+            </Toolbar>
+          </AppBar>
+        </ThemeProvider>
         <Dialog
           open={open}
           onClose={handleClose}
