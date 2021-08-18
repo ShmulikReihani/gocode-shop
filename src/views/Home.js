@@ -34,13 +34,6 @@ const Home = () => {
 
   useEffect(() => {
     setSpinner((prev) => !prev);
-    // fetch("http://localhost:8000/products")
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     setProducts(data);
-    //     setFilterProducts(data);
-    //     setSpinner((prev) => !prev);
-    //   });
     const url = "http://localhost:8000/products";
     axios
       .get(url)

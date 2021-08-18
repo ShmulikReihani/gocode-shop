@@ -8,8 +8,8 @@ import ProductDetails from "./views/ProductDetails";
 function App() {
   return (
     <CartContext>
+      <Header />
       <Container fixed>
-        <Header />
         <Switch>
           <Route path="/products/:id">
             <ProductDetails />

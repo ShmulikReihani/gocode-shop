@@ -15,6 +15,7 @@ import { useContext } from "react";
 import { CartCtx } from "../../Context/CartContext/CartContext";
 import "./Header.css";
 import Cart from "../Cart/Cart";
+import { green } from "@material-ui/core/colors";
 
 const StyledBadge = withStyles((theme) => ({
   badge: {
@@ -28,7 +29,6 @@ const StyledBadge = withStyles((theme) => ({
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    marginTop: 10,
     marginBottom: 25,
   },
   menuButton: {
@@ -36,6 +36,9 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
+  },
+  appBar: {
+    backgroundColor: green,
   },
 }));
 
@@ -55,7 +58,7 @@ const Header = () => {
   return (
     <>
       <div className={classes.root}>
-        <AppBar position="static">
+        <AppBar position="static" className={classes.appBar}>
           <Toolbar>
             <IconButton
               edge="start"
