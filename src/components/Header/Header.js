@@ -8,6 +8,7 @@ import {
   Typography,
   withStyles,
   Avatar,
+  Button,
 } from "@material-ui/core";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import Badge from "@material-ui/core/Badge";
@@ -16,8 +17,9 @@ import { useContext } from "react";
 import { CartCtx } from "../../Context/CartContext/CartContext";
 import "./Header.css";
 import Cart from "../Cart/Cart";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import logo from "../../images/logo.PNG";
+import { UserCtx } from "../../Context/UserContext/UserContext";
 
 const StyledBadge = withStyles((theme) => ({
   badge: {
@@ -47,6 +49,8 @@ const useStyles = makeStyles((theme) => ({
 const Header = () => {
   const [list] = useContext(CartCtx);
   const [open, setOpen] = useState(false);
+  const history = useHistory();
+  const [user, setUser] = useContext(UserCtx);
 
   const handleClose = () => {
     setOpen(false);
@@ -75,7 +79,28 @@ const Header = () => {
                   SHOPPING STORE
                 </Link>
               </Typography>
-
+              <Typography variant="h6" className={classes.title}>
+                hello {user && user.firstName ? user.firstName : "strenger"}
+              </Typography>
+              {user && user.firstName ? (
+                <Link to="/logout">
+                  <Button
+                    style={{ color: "white", marginRight: "20px" }}
+                    size="small"
+                  >
+                    Logout
+                  </Button>
+                </Link>
+              ) : (
+                <Link to="/signIn">
+                  <Button
+                    style={{ color: "white", marginRight: "20px" }}
+                    size="small"
+                  >
+                    Login
+                  </Button>
+                </Link>
+              )}
               <StyledBadge
                 badgeContent={list.length}
                 color="secondary"
