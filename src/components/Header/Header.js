@@ -9,15 +9,20 @@ import {
   withStyles,
   Avatar,
   Button,
+  Menu,
+  MenuItem,
+  IconButton,
+  Divider,
 } from "@material-ui/core";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Badge from "@material-ui/core/Badge";
 import { useState } from "react";
 import { useContext } from "react";
 import { CartCtx } from "../../Context/CartContext/CartContext";
 import "./Header.css";
 import Cart from "../Cart/Cart";
-import { Link, useHistory } from "react-router-dom";
+import { Link, Redirect, useHistory } from "react-router-dom";
 import logo from "../../images/logo.PNG";
 import { UserCtx } from "../../Context/UserContext/UserContext";
 
@@ -51,6 +56,15 @@ const Header = () => {
   const [open, setOpen] = useState(false);
   const history = useHistory();
   const [user, setUser] = useContext(UserCtx);
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleClickAnchorEl = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseAnchorEl = () => {
+    setAnchorEl(null);
+  };
 
   const handleClose = () => {
     setOpen(false);
@@ -108,6 +122,53 @@ const Header = () => {
               >
                 <ShoppingCartIcon fontSize={"large"} onClick={handleToggle} />
               </StyledBadge>
+              <div>
+                <IconButton
+                  aria-label="more"
+                  aria-controls="long-menu"
+                  aria-haspopup="true"
+                  onClick={handleClickAnchorEl}
+                  style={{ color: "white" }}
+                >
+                  <MoreVertIcon />
+                </IconButton>
+                <Menu
+                  id="simple-menu"
+                  anchorEl={anchorEl}
+                  keepMounted
+                  open={Boolean(anchorEl)}
+                  onClose={handleCloseAnchorEl}
+                >
+                  <Typography
+                    variant="h6"
+                    className={classes.title}
+                    style={{ marginRight: "4px", marginLeft: "4px" }}
+                  >
+                    hello {user && user.firstName ? user.firstName : "strenger"}
+                  </Typography>
+                  <br />
+                  <Divider />
+                  <MenuItem
+                    onClick={() => {
+                      handleCloseAnchorEl();
+                      history.push("/");
+                    }}
+                  >
+                    Home
+                  </MenuItem>
+                  <MenuItem onClick={handleCloseAnchorEl}>Orders</MenuItem>
+                  {user && user.firstName ? (
+                    <MenuItem
+                      onClick={() => {
+                        handleCloseAnchorEl();
+                        history.push("/logout");
+                      }}
+                    >
+                      Logout
+                    </MenuItem>
+                  ) : null}
+                </Menu>
+              </div>
             </Toolbar>
           </AppBar>
         </ThemeProvider>

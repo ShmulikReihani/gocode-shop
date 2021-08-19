@@ -5,7 +5,7 @@ export const UserCtx = createContext();
 function getUser() {
   const userString = sessionStorage.getItem("user");
   const user = JSON.parse(userString);
-  return user;
+  return user.data.user;
 }
 
 export function UserContext({ children }) {
