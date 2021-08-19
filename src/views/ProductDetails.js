@@ -7,10 +7,14 @@ import {
   makeStyles,
   Typography,
 } from "@material-ui/core";
-import { useEffect, useState } from "react";
+import DeleteIcon from "@material-ui/icons/Delete";
+import UpdateIcon from "@material-ui/icons/Update";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import Spinner from "../components/UI/Spinner/Spinner";
 import axios from "axios";
+import { UserCtx } from "../Context/UserContext/UserContext";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,6 +32,8 @@ const ProductDetails = () => {
   const [product, setProduct] = useState({});
   const [lodding, setLodding] = useState(false);
   const classes = useStyles();
+  const [user] = useContext(UserCtx);
+  const history = useHistory();
 
   useEffect(() => {
     setLodding((prev) => !prev);
@@ -43,6 +49,18 @@ const ProductDetails = () => {
         console.log(err);
       });
   }, []);
+
+  function handlerDelete() {
+    const url = `http://localhost:8000/api/products/${params.id}`;
+    axios
+      .delete(url)
+      .then((res) => {
+        history.push("/");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
   return (
     <>
@@ -62,13 +80,28 @@ const ProductDetails = () => {
               <Typography variant="body2" color="textSecondary" component="p">
                 {product.description}
               </Typography>
-              <Typography
-                color="black"
-                component="p"
-                style={{ marginTop: "10px" }}
+              <Grid
+                container
+                justifyContent="space-between"
+                style={{ marginTop: "15px" }}
               >
-                {`$${product.price}`}
-              </Typography>
+                <Grid item>
+                  <Typography color="black" component="p">
+                    {`$${product.price}`}
+                  </Typography>
+                </Grid>
+                {user && user.admin ? (
+                  <Grid item>
+                    {/* <UpdateIcon
+                      style={{ marginRight: "5px", cursor: "pointer" }}
+                    /> */}
+                    <DeleteIcon
+                      style={{ marginRight: "5px", cursor: "pointer" }}
+                      onClick={() => handlerDelete()}
+                    />
+                  </Grid>
+                ) : null}
+              </Grid>
             </CardContent>
           </Card>
         </Grid>
