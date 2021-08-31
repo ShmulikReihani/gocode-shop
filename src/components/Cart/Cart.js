@@ -10,8 +10,11 @@ import {
   Paper,
   ButtonBase,
 } from "@material-ui/core";
+import axios from "axios";
 import { useContext } from "react";
+import { useHistory } from "react-router-dom";
 import { CartCtx } from "../../Context/CartContext/CartContext";
+import { UserCtx } from "../../Context/UserContext/UserContext";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,7 +44,9 @@ const useStyles = makeStyles((theme) => ({
 const Cart = ({ handleClose }) => {
   const [list, setList, totalPrice, addTotalPrice, reduceTotalPrice] =
     useContext(CartCtx);
+  const [user, setUser] = useContext(UserCtx);
   const classes = useStyles();
+  const history = useHistory();
   const theme = useTheme();
 
   function handlerAddCart(id) {
@@ -68,6 +73,42 @@ const Cart = ({ handleClose }) => {
     if (item > -1) {
       reduceTotalPrice(Number(list[item].price) * list[item].qnt);
       setList(list.filter((item) => item.id !== id));
+    }
+  }
+
+  async function handlerOrderBuy() {
+    const order = {};
+    const orderList = [];
+    for (const l of list) {
+      const orderObj = {};
+      orderObj["title"] = l.title;
+      orderObj["price"] = l.price;
+      orderObj["id"] = l.id;
+      const quantity = l.qnt;
+      const obj = {
+        products: orderObj,
+        quantity: quantity,
+        price: quantity * l.price,
+      };
+      orderList.push(obj);
+    }
+    order["products"] = orderList;
+    order["totalePrice"] = totalPrice;
+    order["firstName"] = user.firstName;
+    order["userId"] = user._id;
+
+    const options = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    const url = "http://localhost:8000/api/orders";
+    try {
+      const ord = await axios.post(url, order, options);
+      console.log(ord);
+      history.push("/");
+    } catch (err) {
+      return err;
     }
   }
 
@@ -187,7 +228,9 @@ const Cart = ({ handleClose }) => {
             <Button onClick={() => handleClose()} color="primary">
               Cancel
             </Button>
-            <Button color="primary">Buy</Button>
+            <Button onClick={() => handlerOrderBuy()} color="primary">
+              Buy
+            </Button>
           </Grid>
         </Grid>
       </DialogActions>
